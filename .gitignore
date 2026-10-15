@@ -1,14 +1,74 @@
+# Python environments
 .venv/
+venv/
+env/
+
+# Python caches
 __pycache__/
-*.pyc
+*.py[cod]
 .pytest_cache/
-data/
-*.egg-info/
-models/
-reports/*.log
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+
+# Build and package output
 .dist/
+dist/
+build/
+*.egg-info/
+
+# Local assistant settings
 .claude/
+
+# Credentials and local configuration
 .env
 .env.*
 !.env.example
-reports/indic_asr/
+.streamlit/secrets.toml
+
+# Downloaded/generated datasets
+/data/**/*
+!/data/**/
+!/data/**/*.py
+!/data/**/*.md
+!/data/**/.gitkeep
+
+# Saved models and checkpoints
+/models/**/*
+!/models/**/
+!/models/**/*.py
+!/models/**/*.md
+!/models/**/.gitkeep
+
+# Large audio/video files anywhere
+*.wav
+*.mp3
+*.flac
+*.ogg
+*.m4a
+*.mp4
+
+# Model weights anywhere
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+*.onnx
+
+# Temporary files
+*.log
+*.tmp
+*.bak
+tmp/
+temp/
+
+# Editor and operating-system files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+Desktop.ini
+# External SeaAlert download/repository
+/data/external/seaalert/
