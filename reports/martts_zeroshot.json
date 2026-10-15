@@ -1,0 +1,94 @@
+{
+  "counts": {
+    "test": 177,
+    "dev": 63
+  },
+  "dev_text": {
+    "incident_hit": {
+      "rate": 0.7777777777777778,
+      "n": 27
+    },
+    "incident_top1_hit": {
+      "rate": 0.7407407407407407,
+      "n": 27
+    },
+    "vessel_found": {
+      "rate": 0.9473684210526315,
+      "n": 57
+    },
+    "vessel_exact": {
+      "rate": 0.0,
+      "n": 57
+    },
+    "mmsi_exact": {
+      "rate": 0.47368421052631576,
+      "n": 57
+    },
+    "position_recovered": {
+      "rate": 0.0,
+      "n": 60
+    },
+    "position_within_1nm": {
+      "rate": 0.0,
+      "n": 60
+    },
+    "routine_flagged_high_or_critical": {
+      "rate": 0.8,
+      "n": 15
+    },
+    "mean_severity_by_topic": {
+      "Collision": 3.0,
+      "Fire": 3.3333333333333335,
+      "Flooding": 3.0,
+      "PanPan": 2.6666666666666665,
+      "Regular": 2.0,
+      "SAR": 2.9166666666666665,
+      "Safety": 3.0,
+      "Sinking": 3.0
+    }
+  },
+  "test_text": {
+    "incident_hit": {
+      "rate": 0.8602150537634409,
+      "n": 93
+    },
+    "incident_top1_hit": {
+      "rate": 0.8172043010752689,
+      "n": 93
+    },
+    "vessel_found": {
+      "rate": 0.8562874251497006,
+      "n": 167
+    },
+    "vessel_exact": {
+      "rate": 0.0,
+      "n": 167
+    },
+    "mmsi_exact": {
+      "rate": 0.44047619047619047,
+      "n": 168
+    },
+    "position_recovered": {
+      "rate": 0.0,
+      "n": 174
+    },
+    "position_within_1nm": {
+      "rate": 0.0,
+      "n": 174
+    },
+    "routine_flagged_high_or_critical": {
+      "rate": 0.6222222222222222,
+      "n": 45
+    },
+    "mean_severity_by_topic": {
+      "Collision": 3.0,
+      "Fire": 3.142857142857143,
+      "Flooding": 3.074074074074074,
+      "PanPan": 2.857142857142857,
+      "Regular": 2.4814814814814814,
+      "SAR": 3.3333333333333335,
+      "Safety": 2.6666666666666665,
+      "Sinking": 3.111111111111111
+    }
+  }
+}

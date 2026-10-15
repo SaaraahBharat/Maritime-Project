@@ -1,0 +1,214 @@
+{
+  "sizes": {
+    "train": 8000,
+    "val": 2000,
+    "test": 2001
+  },
+  "ner": {
+    "micro_f1": 0.8916631200643117,
+    "micro_f1_ci95": [
+      0.884811940152201,
+      0.8975430805078518
+    ],
+    "per_label_f1": {
+      "INCIDENT": 0.781594011448701,
+      "MMSI": 0.8522954091816367,
+      "POB": 0.9463414634146341,
+      "POSITION": 0.9827411167512691,
+      "VESSEL": 0.8862190812720848,
+      "VESSEL_TYPE": 0.8849185496584341
+    },
+    "by_language": {
+      "ml": 0.9135013162843174,
+      "hi": 0.8802897445672894,
+      "en": 0.8499540863177227,
+      "ta": 0.9248734916309849
+    },
+    "by_style": {
+      "textbook": 0.9084211863330369,
+      "hurried": 0.8737834549878345,
+      "panicked": 0.889519259480442
+    },
+    "by_phrasing": {
+      "unseen": 0.8885306760453302,
+      "seen": 0.9866666666666667
+    }
+  },
+  "incident": {
+    "keyword_baseline_macro_f1": 0.8004231340264014,
+    "tfidf_lr_macro_f1": 0.8872106827290771,
+    "tfidf_lr_macro_f1_ci95": [
+      0.8722058589038706,
+      0.8997441122151484
+    ],
+    "seen_phrasing": {
+      "baseline": 1.0,
+      "tfidf_lr": 1.0
+    },
+    "unseen_phrasing": {
+      "baseline": 0.792934415835258,
+      "tfidf_lr": 0.883325284919128
+    },
+    "per_class_f1": {
+      "fire": 0.8596491228070176,
+      "flooding": 0.9011976047904192,
+      "engine_failure": 0.9233278955954323,
+      "capsizing": 0.8725868725868726,
+      "man_overboard": 0.9548872180451128,
+      "medical": 0.862876254180602,
+      "collision": 0.8271604938271605,
+      "grounding": 0.896
+    }
+  },
+  "severity": {
+    "majority_baseline_accuracy": 0.45827086456771615,
+    "multinomial_uncalibrated": {
+      "accuracy": 0.8075962018990505,
+      "macro_f1": 0.8191726360950382,
+      "mae": 0.21989005497251374,
+      "quadratic_kappa": 0.8157855347387796,
+      "ece": 0.091986166040535
+    },
+    "multinomial_temperature_scaled": {
+      "accuracy": 0.8075962018990505,
+      "macro_f1": 0.8191726360950382,
+      "mae": 0.21989005497251374,
+      "quadratic_kappa": 0.8157855347387796,
+      "ece": 0.07302968891385068,
+      "temperature": 2.1214960519187516
+    },
+    "ordinal_frank_hall": {
+      "accuracy": 0.7631184407796102,
+      "macro_f1": 0.7705307391998887,
+      "mae": 0.30184907546226886,
+      "quadratic_kappa": 0.7286180457618219,
+      "ece": 0.08241375043477932
+    },
+    "chosen_model": "TemperatureScaled",
+    "conformal_90": {
+      "empirical_coverage": 0.8925537231384307,
+      "mean_set_size": 1.3968015992003997
+    },
+    "top_features_high_or_worse": [
+      [
+        "p_fire",
+        5.106872430094391
+      ],
+      [
+        "p_man_overboard",
+        4.723411419720518
+      ],
+      [
+        "p_capsizing",
+        4.644384445777355
+      ],
+      [
+        "n_incident_types",
+        4.549909626457337
+      ],
+      [
+        "p_flooding",
+        4.322105627633039
+      ],
+      [
+        "p_collision",
+        4.039185964235284
+      ],
+      [
+        "p_grounding",
+        -3.628744661530808
+      ],
+      [
+        "p_engine_failure",
+        -3.5656684598458557
+      ]
+    ]
+  },
+  "end_to_end": {
+    "vessel_exact": 0.9349798387096774,
+    "pob_exact": 0.9711099847947289,
+    "mmsi_exact": 0.9416342412451362,
+    "position_recovered": 0.9964485032978183,
+    "position_correct": 0.9964485032978183,
+    "position_median_err_nm": 0.04838700025531831,
+    "position_median_err_nm_relative": 4.147808818323897,
+    "position_median_err_nm_decimal": 0.0,
+    "position_median_err_nm_dms": 0.006004046073322607,
+    "position_median_err_nm_ddm": 0.04006904061351793,
+    "incident_macro_f1": 0.8872106827290771,
+    "missing_info": {
+      "vessel_name": {
+        "support": 17,
+        "precision": 0.7083333333333334,
+        "recall": 1.0
+      },
+      "position": {
+        "support": 30,
+        "precision": 0.8108108108108109,
+        "recall": 1.0
+      },
+      "incident_types": {
+        "support": 23,
+        "precision": 0.13513513513513514,
+        "recall": 0.8695652173913043
+      },
+      "pob": {
+        "support": 28,
+        "precision": 0.5833333333333334,
+        "recall": 1.0
+      }
+    },
+    "contradiction": {
+      "support": 160,
+      "precision": 0.8609271523178808,
+      "recall": 0.8125
+    }
+  },
+  "robustness_curve": [
+    {
+      "corruption_rate": 0.0,
+      "measured_wer": 0.0,
+      "vessel_exact": 0.9387755102040817,
+      "pob_exact": 0.9797297297297297,
+      "position_recovered": 0.9966329966329966,
+      "position_correct": 0.9966329966329966,
+      "incident_macro_f1": 0.9084821829276281
+    },
+    {
+      "corruption_rate": 0.05,
+      "measured_wer": 0.05862430449157326,
+      "vessel_exact": 0.8061224489795918,
+      "pob_exact": 0.9054054054054054,
+      "position_recovered": 0.7070707070707071,
+      "position_correct": 0.6195286195286195,
+      "incident_macro_f1": 0.899303127163539
+    },
+    {
+      "corruption_rate": 0.1,
+      "measured_wer": 0.11878074348842835,
+      "vessel_exact": 0.7210884353741497,
+      "pob_exact": 0.8716216216216216,
+      "position_recovered": 0.4444444444444444,
+      "position_correct": 0.38047138047138046,
+      "incident_macro_f1": 0.8799728603970713
+    },
+    {
+      "corruption_rate": 0.2,
+      "measured_wer": 0.2395774534311749,
+      "vessel_exact": 0.5170068027210885,
+      "pob_exact": 0.7398648648648649,
+      "position_recovered": 0.2053872053872054,
+      "position_correct": 0.15824915824915825,
+      "incident_macro_f1": 0.8714444599342962
+    },
+    {
+      "corruption_rate": 0.3,
+      "measured_wer": 0.35142327231674864,
+      "vessel_exact": 0.3673469387755102,
+      "pob_exact": 0.6317567567567568,
+      "position_recovered": 0.12794612794612795,
+      "position_correct": 0.09090909090909091,
+      "incident_macro_f1": 0.848110715597367
+    }
+  ]
+}

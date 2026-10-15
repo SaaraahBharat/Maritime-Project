@@ -1,0 +1,113 @@
+{
+  "model": "small",
+  "language_hint": true,
+  "domain_prompt": true,
+  "caller_wer": 0.7307692307692307,
+  "caller_cer": 0.5523590333716916,
+  "by_group": {
+    "lang=en": {
+      "wer": 0.30120481927710846,
+      "cer": 0.17084282460136674,
+      "n": 6
+    },
+    "lang=ml": {
+      "wer": 1.0,
+      "cer": 1.0,
+      "n": 1
+    },
+    "lang=ta": {
+      "wer": 0.9479166666666666,
+      "cer": 0.8995983935742972,
+      "n": 1
+    },
+    "snr=-10..0 dB": {
+      "wer": 0.9479166666666666,
+      "cer": 0.8995983935742972,
+      "n": 1
+    },
+    "snr=10..30 dB": {
+      "wer": 0.20588235294117646,
+      "cer": 0.0972972972972973,
+      "n": 3
+    },
+    "snr=5..10 dB": {
+      "wer": 0.7019230769230769,
+      "cer": 0.5471264367816092,
+      "n": 4
+    }
+  },
+  "pipeline_on_asr": {
+    "vessel_exact": 0.0,
+    "pob_exact": 0.0,
+    "position_recovered": 0.0,
+    "position_correct": 0.0,
+    "mmsi_exact": 0.0,
+    "incident_macro_f1": 0.25,
+    "missing_info": {
+      "vessel_name": {
+        "support": 0,
+        "precision": 0.0,
+        "recall": 0.0
+      },
+      "position": {
+        "support": 0,
+        "precision": 0.0,
+        "recall": 0.0
+      },
+      "incident_types": {
+        "support": 0,
+        "precision": 0.0,
+        "recall": 0.0
+      },
+      "pob": {
+        "support": 0,
+        "precision": 0.0,
+        "recall": 0.0
+      }
+    },
+    "contradiction": {
+      "support": 0,
+      "precision": 0.0,
+      "recall": 0.0
+    }
+  },
+  "pipeline_on_reference": {
+    "vessel_exact": 1.0,
+    "pob_exact": 1.0,
+    "position_recovered": 1.0,
+    "position_correct": 1.0,
+    "mmsi_exact": 1.0,
+    "position_median_err_nm": 0.11227299307414171,
+    "position_median_err_nm_ddm": 0.01321855033166382,
+    "position_median_err_nm_decimal": 0.21125992239038896,
+    "position_median_err_nm_relative": 11.38324022111267,
+    "incident_macro_f1": 0.375,
+    "missing_info": {
+      "vessel_name": {
+        "support": 0,
+        "precision": 0.0,
+        "recall": 0.0
+      },
+      "position": {
+        "support": 0,
+        "precision": 0.0,
+        "recall": 0.0
+      },
+      "incident_types": {
+        "support": 0,
+        "precision": 0.0,
+        "recall": 0.0
+      },
+      "pob": {
+        "support": 0,
+        "precision": 0.0,
+        "recall": 0.0
+      }
+    },
+    "contradiction": {
+      "support": 0,
+      "precision": 0.0,
+      "recall": 0.0
+    }
+  }
+}

@@ -1,0 +1,29 @@
+[project]
+name = "mdi"
+version = "0.1.0"
+description = "Maritime Distress Call Intelligence & Response Support System"
+requires-python = ">=3.11"
+dependencies = [
+    "pydantic>=2.7",
+    "numpy",
+    "scipy",
+    "soundfile",
+    "scikit-learn",
+    "sklearn-crfsuite",
+    "joblib",
+    "jiwer",
+    "pandas",
+]
+
+[project.optional-dependencies]
+dev = ["pytest"]
+app = ["streamlit", "pydeck", "altair"]
+speech = ["torch", "transformers", "sentencepiece", "uroman", "faster-whisper"]
+real-speech = ["datasets>=3.0"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+
+[tool.setuptools.packages.find]
+include = ["mdi*"]

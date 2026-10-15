@@ -1,0 +1,235 @@
+{
+  "sizes": {
+    "train": 1310,
+    "val": 281,
+    "test": 281
+  },
+  "A_message_category": {
+    "published_macro_f1": {
+      "logistic_regression": {
+        "text": 0.6742,
+        "asr_med": 0.4268,
+        "asr_high": 0.4231
+      },
+      "roberta-base": {
+        "text": 0.6787,
+        "asr_med": 0.6198,
+        "asr_high": 0.6081
+      }
+    },
+    "ours": {
+      "tfidf_lr_clean_training": {
+        "text": {
+          "macro_f1": 0.6858052622758505,
+          "ci95": [
+            0.6333436417453288,
+            0.7368944082755713
+          ]
+        },
+        "asr_low": {
+          "macro_f1": 0.5721452175938102,
+          "ci95": [
+            0.5146149272545861,
+            0.6275467196183364
+          ]
+        },
+        "asr_med": {
+          "macro_f1": 0.5358379676182534,
+          "ci95": [
+            0.4776825029016282,
+            0.5959266128894751
+          ]
+        },
+        "asr_high": {
+          "macro_f1": 0.5579263692851328,
+          "ci95": [
+            0.5046913422650531,
+            0.610823348621097
+          ]
+        }
+      },
+      "tfidf_lr_noise_augmented": {
+        "text": {
+          "macro_f1": 0.6941084024482329,
+          "ci95": [
+            0.6390303887774509,
+            0.7432999672416939
+          ]
+        },
+        "asr_low": {
+          "macro_f1": 0.5557775412487453,
+          "ci95": [
+            0.4976721485959392,
+            0.6105305698877826
+          ]
+        },
+        "asr_med": {
+          "macro_f1": 0.518861938400028,
+          "ci95": [
+            0.4601566691806624,
+            0.5725732419222043
+          ]
+        },
+        "asr_high": {
+          "macro_f1": 0.558647204265761,
+          "ci95": [
+            0.5005078374047767,
+            0.6136309883576843
+          ]
+        }
+      }
+    }
+  },
+  "B_zero_shot_extraction": {
+    "text": {
+      "vessel": {
+        "value": 0.3416370106761566,
+        "n": 281
+      },
+      "mmsi": {
+        "value": 0.26,
+        "n": 150
+      },
+      "pob": {
+        "value": 0.7635658914728682,
+        "n": 258
+      },
+      "severity_Routine": {
+        "value": 2.3285714285714287,
+        "n": 70
+      },
+      "severity_Safety": {
+        "value": 2.342857142857143,
+        "n": 70
+      },
+      "severity_Distress": {
+        "value": 2.492957746478873,
+        "n": 71
+      },
+      "position": {
+        "value": 0.8169934640522876,
+        "n": 153
+      },
+      "severity_Urgency": {
+        "value": 2.1857142857142855,
+        "n": 70
+      }
+    },
+    "asr_low": {
+      "vessel": {
+        "value": 0.1387900355871886,
+        "n": 281
+      },
+      "mmsi": {
+        "value": 0.0,
+        "n": 150
+      },
+      "pob": {
+        "value": 0.6744186046511628,
+        "n": 258
+      },
+      "severity_Routine": {
+        "value": 2.414285714285714,
+        "n": 70
+      },
+      "severity_Safety": {
+        "value": 2.357142857142857,
+        "n": 70
+      },
+      "severity_Distress": {
+        "value": 2.507042253521127,
+        "n": 71
+      },
+      "position": {
+        "value": 0.6143790849673203,
+        "n": 153
+      },
+      "severity_Urgency": {
+        "value": 2.3285714285714287,
+        "n": 70
+      }
+    },
+    "asr_med": {
+      "vessel": {
+        "value": 0.11387900355871886,
+        "n": 281
+      },
+      "mmsi": {
+        "value": 0.0,
+        "n": 150
+      },
+      "pob": {
+        "value": 0.686046511627907,
+        "n": 258
+      },
+      "severity_Routine": {
+        "value": 2.3857142857142857,
+        "n": 70
+      },
+      "severity_Safety": {
+        "value": 2.4,
+        "n": 70
+      },
+      "severity_Distress": {
+        "value": 2.507042253521127,
+        "n": 71
+      },
+      "position": {
+        "value": 0.5686274509803921,
+        "n": 153
+      },
+      "severity_Urgency": {
+        "value": 2.3,
+        "n": 70
+      }
+    },
+    "asr_high": {
+      "vessel": {
+        "value": 0.05693950177935943,
+        "n": 281
+      },
+      "mmsi": {
+        "value": 0.0,
+        "n": 150
+      },
+      "pob": {
+        "value": 0.6821705426356589,
+        "n": 258
+      },
+      "severity_Routine": {
+        "value": 2.414285714285714,
+        "n": 70
+      },
+      "severity_Safety": {
+        "value": 2.4,
+        "n": 70
+      },
+      "severity_Distress": {
+        "value": 2.492957746478873,
+        "n": 71
+      },
+      "position": {
+        "value": 0.4117647058823529,
+        "n": 153
+      },
+      "severity_Urgency": {
+        "value": 2.2285714285714286,
+        "n": 70
+      }
+    },
+    "published_asr_high": {
+      "regex": {
+        "vessel": 0.465,
+        "mmsi": 0.015,
+        "position": 0.083,
+        "pob": 0.305
+      },
+      "gpt-4o-mini": {
+        "vessel": 0.627,
+        "mmsi": 0.239,
+        "position": 0.323,
+        "pob": 0.796
+      }
+    }
+  }
+}
