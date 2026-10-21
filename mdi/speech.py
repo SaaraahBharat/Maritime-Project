@@ -71,9 +71,45 @@ DOMAIN_PROMPT = (
 )
 
 
+# Transfer learning: Whisper checkpoints already fine-tuned on Indian-language speech
+# (Apache 2.0). Used when the caller language is known; English stays on faster-whisper.
+INDIC_WHISPER = {Language.HI: "vasista22/whisper-hindi-small", Language.TA: "vasista22/whisper-tamil-small",
+                 Language.ML: "thennal/whisper-medium-ml"}
+
+
+@lru_cache(maxsize=1)  # one checkpoint in RAM at a time (medium-ml alone is ~3 GB)
+def _indic_whisper(model_id: str):
+    from transformers import GenerationConfig, WhisperForConditionalGeneration, WhisperProcessor
+
+    processor = WhisperProcessor.from_pretrained(model_id)
+    model = WhisperForConditionalGeneration.from_pretrained(model_id).eval()
+    # Community checkpoints ship old generation configs; borrow the base model's (language/task tokens).
+    model.generation_config = GenerationConfig.from_pretrained(
+        "openai/whisper-medium" if "medium" in model_id else "openai/whisper-small")
+    return processor, model
+
+
+def _transcribe_indic(audio: np.ndarray, lang: Language) -> dict:
+    import torch
+
+    processor, model = _indic_whisper(INDIC_WHISPER[lang])
+    feats = processor(audio, sampling_rate=16000, return_tensors="pt").input_features
+    with torch.no_grad():
+        out = model.generate(feats, language=WHISPER_LANG[lang], task="transcribe", num_beams=1,
+                             max_new_tokens=220, return_dict_in_generate=True, output_scores=True)
+    # Mean probability of the chosen tokens = ASR confidence, comparable to faster-whisper's word probs.
+    probs = [float(torch.softmax(s[0], -1).max()) for s in out.scores]
+    return {"text": processor.batch_decode(out.sequences, skip_special_tokens=True)[0].strip(),
+            "language": WHISPER_LANG[lang], "language_probability": 1.0,
+            "confidence": float(np.mean(probs)) if probs else 0.0}
+
+
 def transcribe(audio: np.ndarray | str, lang: Language | str | None = None, size: str = "small",
-               prompt: str | None = DOMAIN_PROMPT) -> dict:
-    """Returns text, detected language, and a mean word probability as ASR confidence."""
+               prompt: str | None = DOMAIN_PROMPT, indic: bool = False) -> dict:
+    """Returns text, detected language, and a mean word probability as ASR confidence.
+
+    indic=True routes Hindi/Tamil/Malayalam to the fine-tuned INDIC_WHISPER checkpoint (needs `lang`).
+    """
     if isinstance(audio, str):
         # Decode with soundfile instead of faster-whisper's PyAV path (version clashes on Windows).
         import soundfile as sf
@@ -82,6 +118,8 @@ def transcribe(audio: np.ndarray | str, lang: Language | str | None = None, size
 
         x, sr = sf.read(audio, dtype="float32", always_2d=False)
         audio = resample(x.mean(1) if x.ndim > 1 else x, sr, 16000).astype(np.float32)
+    if indic and lang is not None and Language(lang) in INDIC_WHISPER:
+        return _transcribe_indic(audio, Language(lang))
     language_code = WHISPER_LANG[lang] if isinstance(lang, Language) else lang
     segs, info = _whisper(size).transcribe(
         audio, language=language_code, vad_filter=True, word_timestamps=True, beam_size=5,

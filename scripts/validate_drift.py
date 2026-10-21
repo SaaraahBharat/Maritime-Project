@@ -47,7 +47,7 @@ def load_drifters() -> pd.DataFrame:
     return df.sort_values(["ID", "time"]).reset_index(drop=True)
 
 
-def sample_starts(df: pd.DataFrame, n: int, seed: int, year: int = 2022) -> list[dict]:
+def sample_starts(df: pd.DataFrame, n: int, seed: int, year: int = 2022, stride: int = 24) -> list[dict]:
     """Start points with a continuous 24 h track ahead, in open water, spread over buoys.
 
     Only `year` is used: Open-Meteo's Copernicus current history starts in 2022.
@@ -57,7 +57,7 @@ def sample_starts(df: pd.DataFrame, n: int, seed: int, year: int = 2022) -> list
     df = df[df["time"].dt.year == year]
     for _, g in df.groupby("ID"):
         g = g.set_index("time")
-        times = g.index[:: 24]  # candidate every day per buoy
+        times = g.index[:: stride]  # candidate every `stride` hours per buoy
         for t in times:
             ahead = [t + pd.Timedelta(hours=h) for h in HORIZONS]
             if all(a in g.index for a in ahead):

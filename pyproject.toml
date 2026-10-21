@@ -20,6 +20,8 @@ dev = ["pytest"]
 app = ["streamlit", "pydeck", "altair"]
 speech = ["torch", "transformers", "sentencepiece", "uroman", "faster-whisper"]
 real-speech = ["datasets>=3.0"]
+web = ["fastapi", "uvicorn", "python-multipart"]
+ml = ["lightgbm", "llama-cpp-python"]
 
 [tool.pytest.ini_options]
 pythonpath = ["."]

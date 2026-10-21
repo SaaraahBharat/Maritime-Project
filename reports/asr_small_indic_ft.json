@@ -1,0 +1,127 @@
+{
+  "model": "small",
+  "language_hint": false,
+  "domain_prompt": true,
+  "indic_checkpoints": true,
+  "caller_wer": 0.781084656084656,
+  "caller_cer": 0.7675847037844263,
+  "by_group": {
+    "lang=en": {
+      "wer": 0.5725190839694656,
+      "cer": 0.41759880686055184,
+      "n": 14
+    },
+    "lang=hi": {
+      "wer": 0.7857142857142857,
+      "cer": 0.9895536562203229,
+      "n": 16
+    },
+    "lang=ml": {
+      "wer": 0.8138528138528138,
+      "cer": 0.9419642857142857,
+      "n": 20
+    },
+    "lang=ta": {
+      "wer": 0.867579908675799,
+      "cer": 0.7685255920550038,
+      "n": 9
+    },
+    "snr=-10..0 dB": {
+      "wer": 0.9212410501193318,
+      "cer": 0.865034965034965,
+      "n": 16
+    },
+    "snr=0..5 dB": {
+      "wer": 0.8016877637130801,
+      "cer": 0.859697386519945,
+      "n": 9
+    },
+    "snr=10..30 dB": {
+      "wer": 0.6945244956772334,
+      "cer": 0.6584056175134242,
+      "n": 29
+    },
+    "snr=5..10 dB": {
+      "wer": 0.7592592592592593,
+      "cer": 0.8912579957356077,
+      "n": 5
+    }
+  },
+  "pipeline_on_asr": {
+    "vessel_exact": 0.041666666666666664,
+    "pob_exact": 0.13043478260869565,
+    "position_recovered": 0.041666666666666664,
+    "position_correct": 0.041666666666666664,
+    "mmsi_exact": 0.0,
+    "position_median_err_nm": 0.005737091752788865,
+    "position_median_err_nm_dms": 0.005737091752788865,
+    "incident_macro_f1": 0.3464285714285714,
+    "missing_info": {
+      "vessel_name": {
+        "support": 0,
+        "precision": 0.0,
+        "recall": 0.0
+      },
+      "position": {
+        "support": 0,
+        "precision": 0.0,
+        "recall": 0.0
+      },
+      "incident_types": {
+        "support": 1,
+        "precision": 0.0,
+        "recall": 0.0
+      },
+      "pob": {
+        "support": 1,
+        "precision": 0.05,
+        "recall": 1.0
+      }
+    },
+    "contradiction": {
+      "support": 0,
+      "precision": 0.0,
+      "recall": 0.0
+    }
+  },
+  "pipeline_on_reference": {
+    "vessel_exact": 0.9166666666666666,
+    "pob_exact": 0.9565217391304348,
+    "position_recovered": 1.0,
+    "position_correct": 1.0,
+    "mmsi_exact": 0.8333333333333334,
+    "position_median_err_nm": 0.052480437839066,
+    "position_median_err_nm_relative": 6.980832678563932,
+    "position_median_err_nm_dms": 0.005737091752788865,
+    "position_median_err_nm_ddm": 0.03946582163706487,
+    "position_median_err_nm_decimal": 0.21803056351877723,
+    "incident_macro_f1": 0.9464285714285714,
+    "missing_info": {
+      "vessel_name": {
+        "support": 0,
+        "precision": 0.0,
+        "recall": 0.0
+      },
+      "position": {
+        "support": 0,
+        "precision": 0.0,
+        "recall": 0.0
+      },
+      "incident_types": {
+        "support": 1,
+        "precision": 0.3333333333333333,
+        "recall": 1.0
+      },
+      "pob": {
+        "support": 1,
+        "precision": 1.0,
+        "recall": 1.0
+      }
+    },
+    "contradiction": {
+      "support": 0,
+      "precision": 0.0,
+      "recall": 0.0
+    }
+  }
+}

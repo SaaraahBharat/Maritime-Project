@@ -1,0 +1,534 @@
+{
+  "model": "Qwen2.5-1.5B-Instruct Q4_K_M (llama.cpp, JSON-schema constrained)",
+  "sizes": {
+    "seaalert_test": 30,
+    "martts_test": 24
+  },
+  "routing": {
+    "policy": {
+      "vessel_name": "llm_first",
+      "mmsi": "llm_first",
+      "position": "crf_first",
+      "pob": "llm_first"
+    },
+    "dev_accuracy": {
+      "vessel_name": {
+        "crf_first": 0.3607,
+        "llm_first": 0.377,
+        "llm": 0.377
+      },
+      "mmsi": {
+        "crf_first": 0.6286,
+        "llm_first": 0.6857,
+        "llm": 0.6571
+      },
+      "position": {
+        "crf_first": 0.8205,
+        "llm_first": 0.8205,
+        "llm": 0.8205
+      },
+      "pob": {
+        "crf_first": 0.8056,
+        "llm_first": 0.8333,
+        "llm": 0.8056
+      }
+    }
+  },
+  "crf_pipeline": {
+    "seaalert": {
+      "text": {
+        "vessel": {
+          "value": 0.3,
+          "n": 30
+        },
+        "mmsi": {
+          "value": 0.17391304347826086,
+          "n": 23
+        },
+        "pob": {
+          "value": 0.6551724137931034,
+          "n": 29
+        },
+        "severity_Routine": {
+          "value": 2.4444444444444446,
+          "n": 9
+        },
+        "severity_Safety": {
+          "value": 2.3,
+          "n": 10
+        },
+        "severity_Distress": {
+          "value": 3.0,
+          "n": 5
+        },
+        "position": {
+          "value": 0.8181818181818182,
+          "n": 11
+        },
+        "severity_Urgency": {
+          "value": 2.6666666666666665,
+          "n": 6
+        }
+      },
+      "asr_high": {
+        "vessel": {
+          "value": 0.03333333333333333,
+          "n": 30
+        },
+        "mmsi": {
+          "value": 0.0,
+          "n": 23
+        },
+        "pob": {
+          "value": 0.5517241379310345,
+          "n": 29
+        },
+        "severity_Routine": {
+          "value": 2.3333333333333335,
+          "n": 9
+        },
+        "severity_Safety": {
+          "value": 2.7,
+          "n": 10
+        },
+        "severity_Distress": {
+          "value": 3.0,
+          "n": 5
+        },
+        "position": {
+          "value": 0.5454545454545454,
+          "n": 11
+        },
+        "severity_Urgency": {
+          "value": 2.6666666666666665,
+          "n": 6
+        }
+      }
+    },
+    "martts_test_text": {
+      "incident_hit": {
+        "rate": 1.0,
+        "n": 12
+      },
+      "incident_top1_hit": {
+        "rate": 1.0,
+        "n": 12
+      },
+      "vessel_found": {
+        "rate": 1.0,
+        "n": 24
+      },
+      "vessel_exact": {
+        "rate": 0.4166666666666667,
+        "n": 24
+      },
+      "mmsi_exact": {
+        "rate": 0.6666666666666666,
+        "n": 24
+      },
+      "position_recovered": {
+        "rate": 1.0,
+        "n": 24
+      },
+      "position_within_1nm": {
+        "rate": 1.0,
+        "n": 24
+      },
+      "routine_flagged_high_or_critical": {
+        "rate": 0.16666666666666666,
+        "n": 6
+      },
+      "mean_severity_by_topic": {
+        "Collision": 3.0,
+        "Fire": 3.0,
+        "Flooding": 3.0,
+        "PanPan": 3.0,
+        "Regular": 2.3333333333333335,
+        "SAR": 3.0,
+        "Safety": 2.0,
+        "Sinking": 3.0
+      }
+    },
+    "seconds": 0.9
+  },
+  "llm_zero_shot": {
+    "seaalert": {
+      "text": {
+        "vessel": {
+          "value": 0.9333333333333333,
+          "n": 30
+        },
+        "mmsi": {
+          "value": 0.17391304347826086,
+          "n": 23
+        },
+        "pob": {
+          "value": 0.6896551724137931,
+          "n": 29
+        },
+        "severity_Routine": {
+          "value": 2.4444444444444446,
+          "n": 9
+        },
+        "severity_Safety": {
+          "value": 2.3,
+          "n": 10
+        },
+        "severity_Distress": {
+          "value": 3.0,
+          "n": 5
+        },
+        "position": {
+          "value": 0.9090909090909091,
+          "n": 11
+        },
+        "severity_Urgency": {
+          "value": 2.6666666666666665,
+          "n": 6
+        }
+      },
+      "asr_high": {
+        "vessel": {
+          "value": 0.26666666666666666,
+          "n": 30
+        },
+        "mmsi": {
+          "value": 0.08695652173913043,
+          "n": 23
+        },
+        "pob": {
+          "value": 0.6206896551724138,
+          "n": 29
+        },
+        "severity_Routine": {
+          "value": 2.3333333333333335,
+          "n": 9
+        },
+        "severity_Safety": {
+          "value": 2.7,
+          "n": 10
+        },
+        "severity_Distress": {
+          "value": 3.0,
+          "n": 5
+        },
+        "position": {
+          "value": 0.6363636363636364,
+          "n": 11
+        },
+        "severity_Urgency": {
+          "value": 2.6666666666666665,
+          "n": 6
+        }
+      }
+    },
+    "martts_test_text": {
+      "incident_hit": {
+        "rate": 1.0,
+        "n": 12
+      },
+      "incident_top1_hit": {
+        "rate": 1.0,
+        "n": 12
+      },
+      "vessel_found": {
+        "rate": 1.0,
+        "n": 24
+      },
+      "vessel_exact": {
+        "rate": 0.20833333333333334,
+        "n": 24
+      },
+      "mmsi_exact": {
+        "rate": 0.9166666666666666,
+        "n": 24
+      },
+      "position_recovered": {
+        "rate": 1.0,
+        "n": 24
+      },
+      "position_within_1nm": {
+        "rate": 1.0,
+        "n": 24
+      },
+      "routine_flagged_high_or_critical": {
+        "rate": 0.16666666666666666,
+        "n": 6
+      },
+      "mean_severity_by_topic": {
+        "Collision": 3.0,
+        "Fire": 3.0,
+        "Flooding": 3.0,
+        "PanPan": 3.0,
+        "Regular": 2.3333333333333335,
+        "SAR": 3.0,
+        "Safety": 2.0,
+        "Sinking": 3.0
+      }
+    },
+    "seconds": 1170.2,
+    "grounding_rejections": {
+      "mmsi": 53,
+      "position": 39,
+      "pob": 31
+    }
+  },
+  "hybrid": {
+    "seaalert": {
+      "text": {
+        "vessel": {
+          "value": 0.3,
+          "n": 30
+        },
+        "mmsi": {
+          "value": 0.17391304347826086,
+          "n": 23
+        },
+        "pob": {
+          "value": 0.6551724137931034,
+          "n": 29
+        },
+        "severity_Routine": {
+          "value": 2.4444444444444446,
+          "n": 9
+        },
+        "severity_Safety": {
+          "value": 2.3,
+          "n": 10
+        },
+        "severity_Distress": {
+          "value": 3.0,
+          "n": 5
+        },
+        "position": {
+          "value": 0.9090909090909091,
+          "n": 11
+        },
+        "severity_Urgency": {
+          "value": 2.6666666666666665,
+          "n": 6
+        }
+      },
+      "asr_high": {
+        "vessel": {
+          "value": 0.03333333333333333,
+          "n": 30
+        },
+        "mmsi": {
+          "value": 0.08695652173913043,
+          "n": 23
+        },
+        "pob": {
+          "value": 0.6551724137931034,
+          "n": 29
+        },
+        "severity_Routine": {
+          "value": 2.3333333333333335,
+          "n": 9
+        },
+        "severity_Safety": {
+          "value": 2.7,
+          "n": 10
+        },
+        "severity_Distress": {
+          "value": 3.0,
+          "n": 5
+        },
+        "position": {
+          "value": 0.6363636363636364,
+          "n": 11
+        },
+        "severity_Urgency": {
+          "value": 2.6666666666666665,
+          "n": 6
+        }
+      }
+    },
+    "martts_test_text": {
+      "incident_hit": {
+        "rate": 1.0,
+        "n": 12
+      },
+      "incident_top1_hit": {
+        "rate": 1.0,
+        "n": 12
+      },
+      "vessel_found": {
+        "rate": 1.0,
+        "n": 24
+      },
+      "vessel_exact": {
+        "rate": 0.4166666666666667,
+        "n": 24
+      },
+      "mmsi_exact": {
+        "rate": 0.8333333333333334,
+        "n": 24
+      },
+      "position_recovered": {
+        "rate": 1.0,
+        "n": 24
+      },
+      "position_within_1nm": {
+        "rate": 1.0,
+        "n": 24
+      },
+      "routine_flagged_high_or_critical": {
+        "rate": 0.16666666666666666,
+        "n": 6
+      },
+      "mean_severity_by_topic": {
+        "Collision": 3.0,
+        "Fire": 3.0,
+        "Flooding": 3.0,
+        "PanPan": 3.0,
+        "Regular": 2.3333333333333335,
+        "SAR": 3.0,
+        "Safety": 2.0,
+        "Sinking": 3.0
+      }
+    },
+    "seconds": 1.2,
+    "grounding_rejections": {
+      "mmsi": 53,
+      "position": 39,
+      "pob": 28
+    }
+  },
+  "routed": {
+    "seaalert": {
+      "text": {
+        "vessel": {
+          "value": 0.9333333333333333,
+          "n": 30
+        },
+        "mmsi": {
+          "value": 0.17391304347826086,
+          "n": 23
+        },
+        "pob": {
+          "value": 0.7241379310344828,
+          "n": 29
+        },
+        "severity_Routine": {
+          "value": 2.4444444444444446,
+          "n": 9
+        },
+        "severity_Safety": {
+          "value": 2.3,
+          "n": 10
+        },
+        "severity_Distress": {
+          "value": 3.0,
+          "n": 5
+        },
+        "position": {
+          "value": 0.9090909090909091,
+          "n": 11
+        },
+        "severity_Urgency": {
+          "value": 2.6666666666666665,
+          "n": 6
+        }
+      },
+      "asr_high": {
+        "vessel": {
+          "value": 0.26666666666666666,
+          "n": 30
+        },
+        "mmsi": {
+          "value": 0.08695652173913043,
+          "n": 23
+        },
+        "pob": {
+          "value": 0.6896551724137931,
+          "n": 29
+        },
+        "severity_Routine": {
+          "value": 2.3333333333333335,
+          "n": 9
+        },
+        "severity_Safety": {
+          "value": 2.7,
+          "n": 10
+        },
+        "severity_Distress": {
+          "value": 3.0,
+          "n": 5
+        },
+        "position": {
+          "value": 0.6363636363636364,
+          "n": 11
+        },
+        "severity_Urgency": {
+          "value": 2.6666666666666665,
+          "n": 6
+        }
+      }
+    },
+    "martts_test_text": {
+      "incident_hit": {
+        "rate": 1.0,
+        "n": 12
+      },
+      "incident_top1_hit": {
+        "rate": 1.0,
+        "n": 12
+      },
+      "vessel_found": {
+        "rate": 1.0,
+        "n": 24
+      },
+      "vessel_exact": {
+        "rate": 0.20833333333333334,
+        "n": 24
+      },
+      "mmsi_exact": {
+        "rate": 0.9166666666666666,
+        "n": 24
+      },
+      "position_recovered": {
+        "rate": 1.0,
+        "n": 24
+      },
+      "position_within_1nm": {
+        "rate": 1.0,
+        "n": 24
+      },
+      "routine_flagged_high_or_critical": {
+        "rate": 0.16666666666666666,
+        "n": 6
+      },
+      "mean_severity_by_topic": {
+        "Collision": 3.0,
+        "Fire": 3.0,
+        "Flooding": 3.0,
+        "PanPan": 3.0,
+        "Regular": 2.3333333333333335,
+        "SAR": 3.0,
+        "Safety": 2.0,
+        "Sinking": 3.0
+      }
+    },
+    "seconds": 1.1,
+    "grounding_rejections": {
+      "mmsi": 53,
+      "position": 39,
+      "pob": 31
+    }
+  },
+  "published_asr_high": {
+    "regex": {
+      "vessel": 0.465,
+      "mmsi": 0.015,
+      "position": 0.083,
+      "pob": 0.305
+    },
+    "gpt-4o-mini": {
+      "vessel": 0.627,
+      "mmsi": 0.239,
+      "position": 0.323,
+      "pob": 0.796
+    }
+  }
+}

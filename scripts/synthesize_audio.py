@@ -55,12 +55,18 @@ def main() -> None:
     ap.add_argument("--out", type=Path, default=Path("data/audio"))
     ap.add_argument("--noise-dir", type=Path, default=Path("data/noise"))
     ap.add_argument("--seed", type=int, default=0)
+    ap.add_argument("--per-language", type=int, help="take N calls per language instead of the first --n")
     args = ap.parse_args()
 
     rng = np.random.default_rng(args.seed)
     noise = load_noise(args.noise_dir)
     print(f"background noise clips: {len(noise)}")
-    rows = [Dialogue.model_validate_json(l) for l in open(args.data / f"{args.split}.jsonl", encoding="utf-8")][: args.n]
+    rows = [Dialogue.model_validate_json(l) for l in open(args.data / f"{args.split}.jsonl", encoding="utf-8")]
+    if args.per_language:
+        seen: dict = {}
+        rows = [d for d in rows if seen.setdefault(d.language, []).append(d) or len(seen[d.language]) <= args.per_language]
+    else:
+        rows = rows[: args.n]
     out_dir = args.out / args.split
     out_dir.mkdir(parents=True, exist_ok=True)
 

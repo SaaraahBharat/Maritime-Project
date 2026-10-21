@@ -269,9 +269,11 @@ with tabs[0]:
                 st.caption(f"Simulated VHF channel, SNR ≈ {audio[d['id']]['call_snr_db']:.1f} dB")
                 if st.toggle("Use Whisper ASR transcript instead of the reference text"):
                     from mdi.speech import transcribe
+                    indic = st.checkbox("Fine-tuned Indic Whisper for Hindi/Tamil/Malayalam turns", value=True,
+                                        key=f"indic_{d['id']}")
                     with st.spinner("Transcribing each turn with Whisper (CPU)…"):
                         transcript = "\n".join(
-                            f"{t['speaker']}: {transcribe(t['wav'], Language(t['lang']))['text']}"
+                            f"{t['speaker']}: {transcribe(t['wav'], Language(t['lang']), indic=indic)['text']}"
                             for t in audio[d["id"]]["turns"])
             run_report(transcript, Language(d["language"]), gold=gold_view(d), key=d["id"])
 
@@ -286,6 +288,7 @@ with tabs[0]:
     else:
         lang = Language(st.selectbox("Caller language", [l.value for l in Language]))
         up = st.file_uploader("WAV/MP3 of the caller", type=["wav", "mp3", "m4a", "flac"])
+        indic = st.checkbox("Fine-tuned Indic Whisper (Hindi/Tamil/Malayalam)", value=True, key="indic_upload")
         if up:
             import tempfile
             from mdi.speech import transcribe
@@ -293,7 +296,7 @@ with tabs[0]:
                 tmp.write(up.read())
             st.audio(tmp.name)
             with st.spinner("Whisper transcription (CPU)…"):
-                r = transcribe(tmp.name, lang)
+                r = transcribe(tmp.name, lang, indic=indic)
             st.caption(f"ASR confidence {r['confidence']:.2f} · detected language {r['language']} ({r['language_probability']:.2f})")
             run_report("CALLER: " + r["text"], lang, key="upload")
 

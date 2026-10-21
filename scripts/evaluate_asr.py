@@ -49,6 +49,8 @@ def main() -> None:
     ap.add_argument("--model", default="small", help="faster-whisper size: tiny/base/small/medium/large-v3")
     ap.add_argument("--language-hint", action="store_true", help="tell Whisper the caller language")
     ap.add_argument("--no-prompt", action="store_true", help="disable domain-vocabulary prompt (ablation)")
+    ap.add_argument("--indic", action="store_true", help="fine-tuned Indic Whisper for HI/TA/ML turns (uses the known caller language)")
+    ap.add_argument("--tag", default="", help="suffix for report file names")
     args = ap.parse_args()
 
     from scripts.train_and_evaluate import field_eval  # reuse the end-to-end metrics
@@ -56,6 +58,7 @@ def main() -> None:
 
     pipe = Pipeline.load()
     manifest = [json.loads(l) for l in open(args.audio / args.split / "manifest.jsonl", encoding="utf-8")]
+    manifest.sort(key=lambda m: m["language"])  # group languages so --indic loads each checkpoint once
     gold = {d.id: d for d in (Dialogue.model_validate_json(l) for l in open(args.data / f"{args.split}.jsonl", encoding="utf-8"))}
 
     refs, hyps, groups = [], [], defaultdict(lambda: ([], []))
@@ -63,8 +66,9 @@ def main() -> None:
     for m in manifest:
         lines = []
         for t in m["turns"]:
-            hint = Language(t["lang"]) if args.language_hint else None
-            r = transcribe(t["wav"], hint, size=args.model, prompt=None if args.no_prompt else DOMAIN_PROMPT)
+            hint = Language(t["lang"]) if args.language_hint or args.indic else None
+            r = transcribe(t["wav"], hint, size=args.model, prompt=None if args.no_prompt else DOMAIN_PROMPT,
+                           indic=args.indic)
             lines.append(f"{t['speaker']}: {r['text']}")
             if t["speaker"] == "CALLER":
                 ref, hyp = norm(t["text"]), norm(r["text"]) or "<empty>"
@@ -82,6 +86,7 @@ def main() -> None:
         "model": args.model,
         "language_hint": args.language_hint,
         "domain_prompt": not args.no_prompt,
+        "indic_checkpoints": args.indic,
         "caller_wer": jiwer.wer(refs, hyps),
         "caller_cer": jiwer.cer(refs, hyps),  # CER is fairer for Tamil/Malayalam agglutination
         "by_group": {g: {"wer": jiwer.wer(r, h), "cer": jiwer.cer(r, h), "n": len(r)} for g, (r, h) in sorted(groups.items())},
@@ -89,8 +94,9 @@ def main() -> None:
         "pipeline_on_reference": field_eval(pipe, dialogues),
     }
     Path("reports").mkdir(exist_ok=True)
-    Path(f"reports/asr_{args.model}{'_noprompt' if args.no_prompt else ''}.json").write_text(json.dumps(report, indent=2, default=float), encoding="utf-8")
-    with open(f"reports/asr_{args.model}{'_noprompt' if args.no_prompt else ''}_transcripts.jsonl", "w", encoding="utf-8") as f:
+    stem = f"reports/asr_{args.model}{'_noprompt' if args.no_prompt else ''}{args.tag}"
+    Path(f"{stem}.json").write_text(json.dumps(report, indent=2, default=float), encoding="utf-8")
+    with open(f"{stem}_transcripts.jsonl", "w", encoding="utf-8") as f:
         f.writelines(json.dumps(r, ensure_ascii=False) + "\n" for r in rows)
     print(json.dumps({k: report[k] for k in ("caller_wer", "caller_cer", "by_group")}, indent=2, default=float))
 
