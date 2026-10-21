@@ -86,8 +86,15 @@
     },
     "chosen_model": "TemperatureScaled",
     "conformal_90": {
-      "empirical_coverage": 0.8925537231384307,
-      "mean_set_size": 1.3968015992003997
+      "empirical_coverage": 0.888055972013993,
+      "mean_set_size": 1.539230384807596,
+      "coverage_by_true_class": {
+        "LOW": 0.9578947368421052,
+        "MODERATE": 0.9,
+        "HIGH": 0.8735005452562704,
+        "CRITICAL": 0.8815331010452961
+      },
+      "method": "class-conditional (Mondrian)"
     },
     "top_features_high_or_worse": [
       [
@@ -122,7 +129,17 @@
         "p_engine_failure",
         -3.5656684598458557
       ]
-    ]
+    ],
+    "conformal_90_marginal": {
+      "empirical_coverage": 0.8925537231384307,
+      "mean_set_size": 1.3968015992003997,
+      "coverage_by_true_class": {
+        "LOW": 1.0,
+        "MODERATE": 0.934375,
+        "HIGH": 0.9858233369683751,
+        "CRITICAL": 0.6846689895470384
+      }
+    }
   },
   "end_to_end": {
     "vessel_exact": 0.9349798387096774,

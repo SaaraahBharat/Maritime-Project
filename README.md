@@ -7,14 +7,13 @@ missing, and which rescue asset can get there first. A human operator verifies
 every field; the system never dispatches on its own.
 
 - [docs/DATASETS.md](docs/DATASETS.md): every dataset and open-source model used, and why
-- [presentation/](presentation/): project slides, rebuilt from `reports/*.json` by `build_deck.js`
 - [reports/](reports/): every evaluation result as JSON
 
 ## Quick start (laptop, CPU only)
 
 ```bash
 python -m venv .venv
-.venv/Scripts/python -m pip install -e ".[dev,app,speech,web,ml]"
+.venv/Scripts/python -m pip install -e ".[dev,speech,web,ml]"
 .venv/Scripts/python scripts/generate_dataset.py --n 20000          # Phase 1: synthetic dialogues
 .venv/Scripts/python scripts/train_and_evaluate.py                  # Phases 3-4: train + evaluate
 .venv/Scripts/uvicorn mdi.api:app --port 8000                       # Phase 7: operator console -> http://localhost:8000
@@ -24,7 +23,6 @@ The operator console (`web/`, served by the FastAPI app in `mdi/api.py`) has a
 call queue, a live map with the drift search area and asset routes, the
 extracted incident with evidence and confidence, and a model-performance view
 read from `reports/*.json`. **▶ Live demo** plays one distress call end to end.
-The older Streamlit dashboard (`streamlit run app/streamlit_app.py`) still works.
 
 Heavier ML components (each has its own script and report):
 
@@ -57,7 +55,8 @@ Optional audio (Phase 1-2):
 | Drift (physics + LightGBM) | 11 real NOAA buoys, buoy-grouped CV | 24 h error 8.9 nm (+2.1%, CI 0.6–3.6%) | physics 9.1 nm |
 
 Known weak spots: 43% of CRITICAL calls are predicted HIGH
-(`reports/severity_diagnostics.json`), and the labelled training data is synthetic.
+(`reports/severity_diagnostics.json`); class-conditional conformal sets compensate,
+raising CRITICAL coverage from 68% to 88%. The labelled training data is synthetic.
 
 ## Pipeline
 
@@ -70,7 +69,7 @@ transcript ─► CRF NER ─► field normalisers (position/number/MMSI parsers
      missing-info + contradiction detection ─► suggested follow-up questions
      Monte Carlo drift ─► 90% search area ─► asset ETA ranking ─► Hungarian assignment
                                                                            ▼
-                                         Streamlit operator dashboard / training simulator
+                                         web operator console (FastAPI + MapLibre)
 ```
 
 ## Data science methods used
@@ -82,7 +81,7 @@ transcript ─► CRF NER ─► field normalisers (position/number/MMSI parsers
 | Multi-label text classification, TF-IDF char/word n-grams, baseline comparison | `mdi/nlp/models.py` |
 | Ordinal regression (Frank & Hall) vs multinomial | `mdi/nlp/models.py` |
 | Probability calibration (temperature scaling, ECE) | `mdi/nlp/models.py` |
-| Uncertainty quantification (split conformal prediction sets) | `mdi/nlp/models.py` |
+| Uncertainty quantification (class-conditional split conformal prediction sets) | `mdi/nlp/models.py` |
 | Explainability (exact linear SHAP contributions) | `mdi/pipeline.py` |
 | Robustness analysis (metric vs word error rate) | `scripts/train_and_evaluate.py` |
 | Bootstrap confidence intervals, stratified evaluation (language, style, seen/unseen) | `scripts/train_and_evaluate.py` |
@@ -106,6 +105,5 @@ mdi/nlp/llm.py           Qwen2.5-1.5B extractor (llama.cpp), grounding guard, CR
 mdi/api.py               FastAPI backend for the operator console
 web/                     operator console (HTML/CSS/JS, MapLibre map, no build step)
 scripts/                 generate / synthesise / train / evaluate / download
-app/streamlit_app.py     older Streamlit dashboard: live ops, board, simulator, evaluation, dataset
 tests/                   pytest suite
 ```

@@ -17,7 +17,6 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = ["pytest"]
-app = ["streamlit", "pydeck", "altair"]
 speech = ["torch", "transformers", "sentencepiece", "uroman", "faster-whisper"]
 real-speech = ["datasets>=3.0"]
 web = ["fastapi", "uvicorn", "python-multipart"]

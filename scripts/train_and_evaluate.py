@@ -27,10 +27,10 @@ from mdi.data.noise_text import corrupt  # noqa: E402
 from mdi.data.spoken import haversine_nm  # noqa: E402
 from mdi.nlp.models import (  # noqa: E402
     FEATURE_NAMES, INCIDENT_CLASSES, IncidentClassifier, KeywordIncidentBaseline, OrdinalLogistic,
-    SplitConformal, TemperatureScaled, caller_text, expected_calibration_error, severity_features,
+    ClassConditionalConformal, SplitConformal, TemperatureScaled, caller_text, expected_calibration_error, severity_features,
 )
 from mdi.nlp.ner import CrfNer  # noqa: E402
-from mdi.pipeline import Pipeline  # noqa: E402
+from mdi.pipeline import SEVERITY_NAMES, Pipeline  # noqa: E402
 from mdi.schema import CRITICAL_FIELDS, Dialogue  # noqa: E402
 
 RNG = np.random.default_rng(0)
@@ -82,6 +82,28 @@ def sev_X(ner, incident_proba, dialogues):
         vt = next((_VT_LOOKUP.get(e["text"].lower()) for e in ents if e["label"] == "VESSEL_TYPE"), None)
         X.append(severity_features(p, pob, "mayday" in d.transcript.lower(), vt))
     return np.array(X)
+
+
+def _coverage(conf, proba, y) -> dict:
+    sets = conf.predict_sets(proba)
+    return {"empirical_coverage": float(np.mean([k - 1 in st for k, st in zip(y, sets)])),
+            "mean_set_size": float(np.mean([len(st) for st in sets])),
+            "coverage_by_true_class": {SEVERITY_NAMES[c]: float(np.mean([c - 1 in st for k, st in zip(y, sets) if k == c]))
+                                       for c in (1, 2, 3, 4) if (y == c).any()}}
+
+
+def fit_conformal(model, Xva, yva, Xte, yte, out: dict):
+    """Marginal vs class-conditional (Mondrian) conformal; the class-conditional one is used.
+
+    Marginal sets hit 90% on average but under-cover CRITICAL; Mondrian sets guarantee
+    90% for each true severity level, at the cost of slightly larger sets.
+    """
+    pva, pte = model.predict_proba(Xva), model.predict_proba(Xte)
+    marginal = SplitConformal(alpha=0.1).fit(pva, yva - 1)
+    mondrian = ClassConditionalConformal(alpha=0.1).fit(pva, yva - 1)
+    out["conformal_90_marginal"] = _coverage(marginal, pte, yte)
+    out["conformal_90"] = {**_coverage(mondrian, pte, yte), "method": "class-conditional (Mondrian)"}
+    return mondrian
 
 
 # --- end-to-end field evaluation --------------------------------------------
@@ -168,7 +190,19 @@ def main() -> None:
     ap.add_argument("--max-train", type=int, default=8000, help="cap CRF training size for laptop CPUs")
     ap.add_argument("--robustness-n", type=int, default=300)
     ap.add_argument("--eval-only", action="store_true", help="reuse models/pipeline.joblib, refresh end-to-end metrics")
+    ap.add_argument("--refit-conformal", action="store_true", help="reuse the saved models, refit only the conformal sets")
     args = ap.parse_args()
+    if args.refit_conformal:
+        metrics = json.loads(Path("reports/metrics.json").read_text(encoding="utf-8"))
+        pipe = Pipeline.load()
+        val, test = load(args.data, "val"), load(args.data, "test")
+        Xva, Xte = (sev_X(pipe.ner, pipe.incident_clf.predict_proba([caller_text(d.transcript) for d in ds]), ds) for ds in (val, test))
+        yva, yte = (np.array([int(d.incident.severity) for d in ds]) for ds in (val, test))
+        pipe.conformal = fit_conformal(pipe.severity_model, Xva, yva, Xte, yte, metrics["severity"])
+        pipe.save("models/pipeline.joblib")
+        Path("reports/metrics.json").write_text(json.dumps(metrics, indent=2), encoding="utf-8")
+        print(json.dumps({k: metrics["severity"][k] for k in ("conformal_90_marginal", "conformal_90")}, indent=2))
+        return
     if args.eval_only:
         metrics = json.loads(Path("reports/metrics.json").read_text(encoding="utf-8"))
         test = load(args.data, "test")
@@ -259,13 +293,8 @@ def main() -> None:
         "ordinal_frank_hall": sev_metrics(p_ord),
     }
     chosen = ordinal if metrics["severity"]["ordinal_frank_hall"]["mae"] <= metrics["severity"]["multinomial_temperature_scaled"]["mae"] else multi
-    conformal = SplitConformal(alpha=0.1).fit(chosen.predict_proba(Xva), yva - 1)
-    sets = conformal.predict_sets(chosen.predict_proba(Xte))
     metrics["severity"]["chosen_model"] = type(chosen).__name__
-    metrics["severity"]["conformal_90"] = {
-        "empirical_coverage": float(np.mean([y - 1 in s for y, s in zip(yte, sets)])),
-        "mean_set_size": float(np.mean([len(s) for s in sets])),
-    }
+    conformal = fit_conformal(chosen, Xva, yva, Xte, yte, metrics["severity"])
     # Linear-model explanation: global feature weights for P(severity >= HIGH).
     w = ordinal.models[1].coef_[0]
     metrics["severity"]["top_features_high_or_worse"] = sorted(

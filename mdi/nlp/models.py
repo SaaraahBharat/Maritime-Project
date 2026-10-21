@@ -167,3 +167,25 @@ class SplitConformal:
 
     def predict_sets(self, proba: np.ndarray) -> list[list[int]]:
         return [list(np.where(1 - p <= self.qhat)[0]) or [int(p.argmax())] for p in proba]
+
+
+class ClassConditionalConformal(SplitConformal):
+    """Mondrian (class-conditional) conformal sets: coverage >= 1 - alpha for EVERY true class.
+
+    Marginal split conformal can meet 90% on average while under-covering a rare,
+    hard class (here CRITICAL). One threshold per class fixes that; label k enters
+    the set when 1 - p_k <= qhat_k.
+    """
+
+    def fit(self, cal_proba: np.ndarray, cal_y_idx: np.ndarray) -> "ClassConditionalConformal":
+        self.qhats = np.ones(cal_proba.shape[1])
+        for k in range(cal_proba.shape[1]):
+            scores = 1 - cal_proba[cal_y_idx == k, k]
+            if len(scores):
+                q = min(1.0, np.ceil((len(scores) + 1) * (1 - self.alpha)) / len(scores))
+                self.qhats[k] = float(np.quantile(scores, q, method="higher"))
+        self.qhat = float(self.qhats.max())
+        return self
+
+    def predict_sets(self, proba: np.ndarray) -> list[list[int]]:
+        return [list(np.where(1 - p <= self.qhats)[0]) or [int(p.argmax())] for p in proba]

@@ -6,7 +6,7 @@ import pytest
 from mdi.data.generator import GeneratorConfig, generate
 from mdi.data.noise_text import corrupt
 from mdi.data.spoken import haversine_nm
-from mdi.nlp.models import OrdinalLogistic, SplitConformal, expected_calibration_error
+from mdi.nlp.models import ClassConditionalConformal, OrdinalLogistic, SplitConformal, expected_calibration_error
 from mdi.nlp.position import normalise_numbers, parse_count, parse_position
 from mdi.response import engine
 
@@ -69,6 +69,26 @@ def test_conformal_coverage_on_synthetic_probs():
     cov = np.mean([yy in s for yy, s in zip(y[2000:], sets)])
     assert 0.87 <= cov <= 0.93
     assert expected_calibration_error(p, y) < 0.05
+
+
+def test_class_conditional_conformal_covers_a_hard_class():
+    # Class 3 is "hard": the model puts little mass on it, so marginal sets under-cover it.
+    rng = np.random.default_rng(2)
+    n = 6000
+    y = rng.choice(4, size=n, p=[0.32, 0.32, 0.31, 0.05])
+    p = np.full((n, 4), 0.1)
+    p[np.arange(n), y] = 0.7
+    hard = y == 3
+    p[hard] = [0.15, 0.15, 0.5, 0.2]
+    p /= p.sum(1, keepdims=True)
+    cal, te = slice(0, 3000), slice(3000, None)
+
+    def cov_hard(cp):
+        sets = cp.predict_sets(p[te])
+        return np.mean([3 in s for s, yy in zip(sets, y[te]) if yy == 3])
+
+    assert cov_hard(SplitConformal(0.1).fit(p[cal], y[cal])) < 0.5
+    assert cov_hard(ClassConditionalConformal(0.1).fit(p[cal], y[cal])) >= 0.85
 
 
 def test_assignment_prefers_critical_incident():

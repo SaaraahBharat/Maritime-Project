@@ -72,7 +72,4 @@ Thumbs.db
 Desktop.ini
 # External SeaAlert download/repository
 /data/external/seaalert/
-# presentation build tooling
-presentation/node_modules/
-presentation/package-lock.json
 /data/external/martts/README.md

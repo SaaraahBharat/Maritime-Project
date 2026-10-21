@@ -318,7 +318,8 @@ def metrics() -> list[dict]:
                  baseline=sev["multinomial_uncalibrated"]["ece"], note="After vs before temperature scaling (lower is better)")
         if "conformal_90" in sev:
             card("Severity & uncertainty", "Conformal 90% coverage", sev["conformal_90"]["empirical_coverage"],
-                 note=f"Split conformal sets · mean set size {sev['conformal_90']['mean_set_size']:.2f}")
+                 note=f"Class-conditional conformal sets · mean size {sev['conformal_90']['mean_set_size']:.2f} · "
+                      f"CRITICAL covered {sev['conformal_90'].get('coverage_by_true_class', {}).get('CRITICAL', float('nan')):.0%}")
     sa = _report("seaalert.json")
     if sa:
         ours = sa["A_message_category"]["ours"]["tfidf_lr_clean_training"]
