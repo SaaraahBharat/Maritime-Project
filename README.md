@@ -6,9 +6,9 @@ guard operators: who, where, what, how many people, how severe, what is still
 missing, and which rescue asset can get there first. A human operator verifies
 every field; the system never dispatches on its own.
 
-- [docs/PLAN.md](docs/PLAN.md): phase-by-phase plan and what each roadmap phase became
 - [docs/DATASETS.md](docs/DATASETS.md): every dataset and open-source model used, and why
-- [Roadmap image](Maritime%20Distress%20Intelligence%20Roadmap.png): original design
+- [presentation/](presentation/): project slides, rebuilt from `reports/*.json` by `build_deck.js`
+- [reports/](reports/): every evaluation result as JSON
 
 ## Quick start (laptop, CPU only)
 
@@ -42,6 +42,22 @@ Optional audio (Phase 1-2):
 .venv/Scripts/python scripts/synthesize_audio.py --split test --n 100
 .venv/Scripts/python scripts/evaluate_asr.py --model small          # WER by language/SNR + audio-to-incident metrics
 ```
+
+## Key results
+
+| Component | Test data | Result | Baseline |
+|---|---|---|---|
+| Entity extraction (CRF) | synthetic, held-out names and phrasings | micro-F1 0.89 | — |
+| Incident type (TF-IDF + LR) | synthetic | macro-F1 0.89 | keyword rules 0.80 |
+| Severity (calibrated LR) | synthetic | accuracy 81%, ECE 0.073, conformal coverage 89% | majority 46%, ECE 0.092 |
+| Field extraction | MARTTS real radio dialogues (test split) | position 1.00, MMSI 0.82 | zero-shot 0.00 / 0.44 |
+| Message category | SeaAlert, heavy ASR noise | macro-F1 0.56 | published LR 0.42 |
+| Indic ASR (fine-tuned Whisper) | Kathbath real speech over a VHF channel | Hindi WER 0.28 | Whisper-small 0.73 |
+| CRF + LLM routing | SeaAlert, heavy ASR noise | position 0.64, POB 0.69 | CRF alone 0.55 / 0.55 |
+| Drift (physics + LightGBM) | 11 real NOAA buoys, buoy-grouped CV | 24 h error 8.9 nm (+2.1%, CI 0.6–3.6%) | physics 9.1 nm |
+
+Known weak spots: 43% of CRITICAL calls are predicted HIGH
+(`reports/severity_diagnostics.json`), and the labelled training data is synthetic.
 
 ## Pipeline
 
